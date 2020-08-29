@@ -1,5 +1,4 @@
 #include <iostream>
-#include <cstring>
 
 class FormulaBinaryExp;
 class FormulaVar;
@@ -7,16 +6,21 @@ class FormulaVar;
 class FormulaVisitor
 {
     public:
-        virtual void visit(FormulaVar &leaf){};
-        virtual void visit(FormulaBinaryExp * expr){};
+        virtual void visit(FormulaVar* fVar){};
+        virtual void visit(FormulaBinaryExp* fBinExp){};
 };
 
 class Formula
 {
     public:
-        virtual void accept(FormulaVisitor &visitor){};
+        virtual void accept(FormulaVisitor* visitor){};
         virtual void prettyPrinter(){};
+        virtual void changeOperator(){};
+        virtual void swapOperands(){};
 };
+
+//FormulaBinaryExp* temp = new FormulaBinaryExp(NULL, NULL, "");
+Formula* temp = new Formula();
 
 class FormulaVar : public Formula
 {
@@ -27,9 +31,9 @@ class FormulaVar : public Formula
         {
             this->var = var;
         }
-        void accept(FormulaVisitor &visitor)
+        void accept(FormulaVisitor visitor)
         {
-            visitor.visit(*this);
+            visitor.visit(this);
         }
         void prettyPrinter() //Printer
         {
@@ -50,10 +54,11 @@ class FormulaBinaryExp : public Formula
             this->right = right;
             this->op = op;
         }
-        void accept(FormulaVisitor &visitor)
+        void accept(FormulaVisitor* visitor)
         {
             //std::cout << "in accept" << std::endl;
-            visitor.visit(this);
+            visitor->visit(this);
+            //std::cout << "in accept" << std::endl;
         }
         void prettyPrinter() //Printer
         {
@@ -63,6 +68,47 @@ class FormulaBinaryExp : public Formula
             right->prettyPrinter();
             std::cout<<")";
         }
+        void changeOperator()
+        {
+            left->changeOperator();
+            if(op == "+")
+            {
+                op = "-";
+            }
+            right->changeOperator();
+        }
+        void swapOperands()
+        {
+            left->swapOperands();
+            if(op == "&&")
+            {
+                temp = left;
+                left = right;
+                right = temp;
+            }
+            right->swapOperands();
+        }
+
+};
+
+class formulaCommutatorVisitor : public FormulaVisitor
+{
+    void visit(FormulaVar* fVar)
+    {
+        //
+    }
+    void visit(FormulaBinaryExp* fBinExp)
+    {
+        //
+        fBinExp->prettyPrinter();
+        std::cout<<"\n";
+        fBinExp->changeOperator();
+        fBinExp->prettyPrinter();
+        std::cout<<"\n";
+        fBinExp->swapOperands();
+        fBinExp->prettyPrinter();
+        std::cout<<"\n";
+    }
 };
 
 int main()
@@ -85,6 +131,9 @@ int main()
     FormulaBinaryExp *be3 = new FormulaBinaryExp(be2,pPlusQ,"XOR");
     be3->prettyPrinter();
     std::cout<<"\n";
+
+    formulaCommutatorVisitor* visitor = new formulaCommutatorVisitor();
+    be3->accept(visitor);
 }
 
 // class LeafPrinterVisitor : public FormulaVisitor
