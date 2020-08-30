@@ -3,33 +3,44 @@
 
 class FormulaBinaryExp;
 class FormulaVar;
+class Formula;
 
 class FormulaVisitor
 {
     public:
-        virtual void visit(FormulaVar* fVar){};
-        virtual void visit(FormulaBinaryExp* fBinExp){};
+        virtual Formula* visit(FormulaVar* fVar){};
+        virtual Formula* visit(FormulaBinaryExp* fBinExp){};
 };
 
 #include "expressionAST.h"
 
 class formulaCommutatorVisitor : public FormulaVisitor
 {
-    void visit(FormulaVar* fVar)
+    private:
+        Formula* temp;
+        std::string op;
+    public:
+    formulaCommutatorVisitor(std::string op)
     {
-        //
+        this->op = op;
     }
-    void visit(FormulaBinaryExp* fBinExp)
+    Formula* visit(FormulaVar* fVar)
     {
         //
-        fBinExp->prettyPrinter();
-        std::cout<<"\n";
-        fBinExp->changeOperator();
-        fBinExp->prettyPrinter();
-        std::cout<<"\n";
-        fBinExp->swapOperands();
-        fBinExp->prettyPrinter();
-        std::cout<<"\n";
+        
+    }
+    Formula* visit(FormulaBinaryExp* fBinExp)
+    {
+        fBinExp->getLeft()->accept(this);
+        if(fBinExp->getOp() == op)
+        {
+            temp = fBinExp->getLeft();
+            fBinExp->setLeft(fBinExp->getRight());
+            fBinExp->setRight(temp);
+        }
+        fBinExp->getRight()->accept(this);
+
+        return fBinExp;
     }
 };
 

@@ -8,8 +8,10 @@ int main()
     FormulaVar *p = new FormulaVar("p");
     FormulaVar *q = new FormulaVar("q");
     FormulaVar *r = new FormulaVar("r");
-    p->prettyPrinter();
-    q->prettyPrinter();
+    //p->prettyPrinter();
+    //q->prettyPrinter();
+
+    //*p = FormulaBinaryExp();
 
     std::cout<<"\n";
     FormulaBinaryExp *pPlusQ = new FormulaBinaryExp(p,q,"+");
@@ -21,11 +23,14 @@ int main()
     std::cout<<"\n";
 
     FormulaBinaryExp *be3 = new FormulaBinaryExp(be2,pPlusQ,"XOR");
+    
     be3->prettyPrinter();
     std::cout<<"\n";
 
-    formulaCommutatorVisitor* visitor = new formulaCommutatorVisitor();
-    be3->accept(visitor);
+    formulaCommutatorVisitor* visitor = new formulaCommutatorVisitor("&&");
+    Formula *be4;
+    be4 = be3->accept(visitor);
+    be4->prettyPrinter();
 
     //new and delete. malloc and free. don't mix.
     // free memory

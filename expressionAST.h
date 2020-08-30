@@ -12,14 +12,9 @@ class FormulaVisitor;
 class Formula
 {
     public:
-        virtual void accept(FormulaVisitor* visitor){};
+        virtual Formula* accept(FormulaVisitor* visitor){};
         virtual void prettyPrinter(){};
-        virtual void changeOperator(){};
-        virtual void swapOperands(){};
 };
-
-//FormulaBinaryExp* temp = new FormulaBinaryExp(NULL, NULL, "");
-Formula* temp = new Formula();
 
 class FormulaVar : public Formula
 {
@@ -30,7 +25,7 @@ class FormulaVar : public Formula
         {
             this->var = var;
         }
-        void accept(FormulaVisitor visitor)
+        FormulaBinaryExp* accept(FormulaVisitor visitor)
         {
             visitor.visit(this);
         }
@@ -53,11 +48,9 @@ class FormulaBinaryExp : public Formula
             this->right = right;
             this->op = op;
         }
-        void accept(FormulaVisitor* visitor)
+        Formula* accept(FormulaVisitor* visitor)
         {
-            //std::cout << "in accept" << std::endl;
-            visitor->visit(this);
-            //std::cout << "in accept" << std::endl;
+            return visitor->visit(this);
         }
         void prettyPrinter() //Printer
         {
@@ -67,27 +60,31 @@ class FormulaBinaryExp : public Formula
             right->prettyPrinter();
             std::cout<<")";
         }
-        void changeOperator()
+        
+        Formula* getLeft()
         {
-            left->changeOperator();
-            if(op == "+")
-            {
-                op = "-";
-            }
-            right->changeOperator();
+            return left;
         }
-        void swapOperands()
+        void setLeft(Formula* right)
         {
-            left->swapOperands();
-            if(op == "&&")
-            {
-                temp = left;
-                left = right;
-                right = temp;
-            }
-            right->swapOperands();
+            this->left = right;
         }
-
+        Formula* getRight()
+        {
+            return right;
+        }
+        void setRight(Formula* left)
+        {
+            this->right = left;
+        }
+        std::string getOp()
+        {
+            return op;
+        }
+        void setOp(std::string op)
+        {
+            this->op = op;
+        }
 };
 
 #endif //EXPR_AST_H
