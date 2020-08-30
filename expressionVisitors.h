@@ -1,7 +1,8 @@
 #ifndef EXPR_VISITOR_H
 #define EXPR_VISITOR_H
 
-#include "expressionAST.h"
+class FormulaBinaryExp;
+class FormulaVar;
 
 class FormulaVisitor
 {
@@ -9,6 +10,8 @@ class FormulaVisitor
         virtual void visit(FormulaVar* fVar){};
         virtual void visit(FormulaBinaryExp* fBinExp){};
 };
+
+#include "expressionAST.h"
 
 class formulaCommutatorVisitor : public FormulaVisitor
 {

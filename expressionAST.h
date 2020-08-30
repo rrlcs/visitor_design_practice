@@ -7,6 +7,7 @@
 
 class FormulaBinaryExp;
 class FormulaVar;
+class FormulaVisitor;
 
 class Formula
 {
