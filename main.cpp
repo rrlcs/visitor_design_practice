@@ -1,7 +1,6 @@
 #include <iostream>
 //Header only libraries
 #include "expressionVisitors.h"
-#include "expressionAST.h"
 
 int main()
 {
@@ -27,19 +26,18 @@ int main()
     be3->prettyPrinter();
     std::cout<<"\n";
 
-    formulaCommutatorVisitor* visitor1 = new formulaCommutatorVisitor("&&");
-    Formula *be4;
-    be4 = be3->accept(visitor1);
+    formulaCommutatorVisitor* visitor1 = new formulaCommutatorVisitor("+");
+    be3->accept(visitor1);
     std::cout<<"Formula Commutated with && Operator:"<<std::endl;
-    be4->prettyPrinter();
+    be3->prettyPrinter();
     std::cout<<"\n";
 
     formulaPrinterVisitor* visitor2 = new formulaPrinterVisitor();
     std::cout<<"Formula Printed using Printer Visitor:"<<std::endl;
-    be4->accept2(visitor2);
+    be3->accept(visitor2);
     std::cout<<"\n";
 
-    //new and delete. malloc and free. don't mix.
+    //new and delete. malloc and free. preferably don't mix.
     // free memory
     delete p;
     delete q;
@@ -47,7 +45,7 @@ int main()
     delete pPlusQ;
     delete be2;
     delete be3;
-    delete be4;
     delete visitor1;
+    delete visitor2;
     //free(temp);
 }

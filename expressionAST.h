@@ -7,13 +7,11 @@
 
 class FormulaBinaryExp;
 class FormulaVar;
-class FormulaVisitor;
 
 class Formula
 {
     public:
-        virtual Formula* accept(FormulaVisitor* visitor){};
-        virtual void accept2(FormulaVisitor* visitor){};
+        virtual void accept(FormulaVisitor* visitor){};
         virtual void prettyPrinter(){};
 };
 
@@ -26,13 +24,9 @@ class FormulaVar : public Formula
         {
             this->var = var;
         }
-        Formula* accept(FormulaVisitor visitor)
+        void accept(FormulaVisitor visitor)
         {
             visitor.visit(this);
-        }
-        void accept2(FormulaVisitor* visitor)
-        {
-            visitor->visitPrint(this);
         }
         void prettyPrinter() //Printer
         {
@@ -57,13 +51,9 @@ class FormulaBinaryExp : public Formula
             this->right = right;
             this->op = op;
         }
-        Formula* accept(FormulaVisitor* visitor)
+        void accept(FormulaVisitor* visitor)
         {
-            return visitor->visit(this);
-        }
-        void accept2(FormulaVisitor* visitor)
-        {
-            visitor->visitPrint(this);
+            visitor->visit(this);
         }
         void prettyPrinter() //Printer
         {
@@ -78,17 +68,17 @@ class FormulaBinaryExp : public Formula
         {
             return left;
         }
-        void setLeft(Formula* right)
+        void setLeft(Formula* formula)
         {
-            this->left = right;
+            this->left = formula;
         }
         Formula* getRight()
         {
             return right;
         }
-        void setRight(Formula* left)
+        void setRight(Formula* formula)
         {
-            this->right = left;
+            this->right = formula;
         }
         std::string getOp()
         {

@@ -8,10 +8,8 @@ class Formula;
 class FormulaVisitor
 {
     public:
-        virtual Formula* visit(FormulaVar* fVar){};
-        virtual Formula* visit(FormulaBinaryExp* fBinExp){};
-        virtual void visitPrint(FormulaVar* fVar){};
-        virtual void visitPrint(FormulaBinaryExp* fBinExp){};
+        virtual void visit(FormulaVar* fVar){};
+        virtual void visit(FormulaBinaryExp* fBinExp){};
 };
 
 #include "expressionAST.h"
@@ -19,47 +17,58 @@ class FormulaVisitor
 class formulaCommutatorVisitor : public FormulaVisitor
 {
     private:
-        Formula* temp;
         std::string op;
     public:
     formulaCommutatorVisitor(std::string op)
     {
         this->op = op;
     }
-    Formula* visit(FormulaVar* fVar)
+    void visit(FormulaVar* fVar)
     {
-        //
+        std::cout<<"\n Visiting node: ";
+        fVar->prettyPrinter();
+        std::cout<<"\n";
     }
-    Formula* visit(FormulaBinaryExp* fBinExp)
+    void visit(FormulaBinaryExp* fBinExp)
     {
+        std::cout<<"\n Visiting node: ";
+        fBinExp->prettyPrinter();
+        std::cout<<"\n";
+
+        Formula* temp = NULL;
         fBinExp->getLeft()->accept(this);
         if(fBinExp->getOp() == op)
         {
             temp = fBinExp->getLeft();
             fBinExp->setLeft(fBinExp->getRight());
             fBinExp->setRight(temp);
+            std::cout<<"In \n";
+            fBinExp->prettyPrinter();
         }
         fBinExp->getRight()->accept(this);
-
-        return fBinExp;
     }
 };
 
 class formulaPrinterVisitor : public FormulaVisitor
 {
     public:
-        void visitPrint(FormulaVar* fVar)
+        void visit(FormulaVar* fVar)
         {
-            //
-            std::cout << fVar->getVar();
+            std::cout<<"\n Printer Visiting node: ";
+            fVar->prettyPrinter();
+            std::cout<<"\n";
+            fVar->prettyPrinter();
         }
-        void visitPrint(FormulaBinaryExp* fBinExp)
+        void visit(FormulaBinaryExp* fBinExp)
         {
-            //
+            std::cout<<"\n Printer Visiting node: ";
+            fBinExp->prettyPrinter();
+            std::cout<<"\n";
+
             std::cout<<"(";
-            fBinExp->getLeft()->accept2(this);
+            fBinExp->getLeft()->accept(this);
             std::cout<<fBinExp->getOp();
-            fBinExp->getRight()->accept2(this);
+            fBinExp->getRight()->accept(this);
             std::cout<<")";
         }
 };
