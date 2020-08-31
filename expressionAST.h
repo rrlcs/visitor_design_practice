@@ -24,9 +24,9 @@ class FormulaVar : public Formula
         {
             this->var = var;
         }
-        void accept(FormulaVisitor visitor)
+        void accept(FormulaVisitor* visitor)
         {
-            visitor.visit(this);
+            visitor->visit(this);
         }
         void prettyPrinter() //Printer
         {

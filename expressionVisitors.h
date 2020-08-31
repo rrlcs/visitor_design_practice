@@ -39,11 +39,14 @@ class formulaCommutatorVisitor : public FormulaVisitor
         fBinExp->getLeft()->accept(this);
         if(fBinExp->getOp() == op)
         {
+            std::cout<<"\n Entered to mutate: \n";
+
             temp = fBinExp->getLeft();
             fBinExp->setLeft(fBinExp->getRight());
             fBinExp->setRight(temp);
-            std::cout<<"In \n";
+            
             fBinExp->prettyPrinter();
+            std::cout<<"\n";
         }
         fBinExp->getRight()->accept(this);
     }
