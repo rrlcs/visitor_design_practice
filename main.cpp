@@ -27,10 +27,17 @@ int main()
     be3->prettyPrinter();
     std::cout<<"\n";
 
-    formulaCommutatorVisitor* visitor = new formulaCommutatorVisitor("&&");
+    formulaCommutatorVisitor* visitor1 = new formulaCommutatorVisitor("&&");
     Formula *be4;
-    be4 = be3->accept(visitor);
+    be4 = be3->accept(visitor1);
+    std::cout<<"Formula Commutated with && Operator:"<<std::endl;
     be4->prettyPrinter();
+    std::cout<<"\n";
+
+    formulaPrinterVisitor* visitor2 = new formulaPrinterVisitor();
+    std::cout<<"Formula Printed using Printer Visitor:"<<std::endl;
+    be4->accept2(visitor2);
+    std::cout<<"\n";
 
     //new and delete. malloc and free. don't mix.
     // free memory
@@ -40,6 +47,7 @@ int main()
     delete pPlusQ;
     delete be2;
     delete be3;
-    delete visitor;
+    delete be4;
+    delete visitor1;
     //free(temp);
 }

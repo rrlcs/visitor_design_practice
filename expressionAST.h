@@ -13,6 +13,7 @@ class Formula
 {
     public:
         virtual Formula* accept(FormulaVisitor* visitor){};
+        virtual void accept2(FormulaVisitor* visitor){};
         virtual void prettyPrinter(){};
 };
 
@@ -25,13 +26,21 @@ class FormulaVar : public Formula
         {
             this->var = var;
         }
-        FormulaBinaryExp* accept(FormulaVisitor visitor)
+        Formula* accept(FormulaVisitor visitor)
         {
             visitor.visit(this);
+        }
+        void accept2(FormulaVisitor* visitor)
+        {
+            visitor->visitPrint(this);
         }
         void prettyPrinter() //Printer
         {
             std::cout<<var;
+        }
+        std::string getVar()
+        {
+            return var;
         }
 };
 
@@ -51,6 +60,10 @@ class FormulaBinaryExp : public Formula
         Formula* accept(FormulaVisitor* visitor)
         {
             return visitor->visit(this);
+        }
+        void accept2(FormulaVisitor* visitor)
+        {
+            visitor->visitPrint(this);
         }
         void prettyPrinter() //Printer
         {

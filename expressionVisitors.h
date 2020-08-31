@@ -10,6 +10,8 @@ class FormulaVisitor
     public:
         virtual Formula* visit(FormulaVar* fVar){};
         virtual Formula* visit(FormulaBinaryExp* fBinExp){};
+        virtual void visitPrint(FormulaVar* fVar){};
+        virtual void visitPrint(FormulaBinaryExp* fBinExp){};
 };
 
 #include "expressionAST.h"
@@ -27,7 +29,6 @@ class formulaCommutatorVisitor : public FormulaVisitor
     Formula* visit(FormulaVar* fVar)
     {
         //
-        
     }
     Formula* visit(FormulaBinaryExp* fBinExp)
     {
@@ -42,6 +43,25 @@ class formulaCommutatorVisitor : public FormulaVisitor
 
         return fBinExp;
     }
+};
+
+class formulaPrinterVisitor : public FormulaVisitor
+{
+    public:
+        void visitPrint(FormulaVar* fVar)
+        {
+            //
+            std::cout << fVar->getVar();
+        }
+        void visitPrint(FormulaBinaryExp* fBinExp)
+        {
+            //
+            std::cout<<"(";
+            fBinExp->getLeft()->accept2(this);
+            std::cout<<fBinExp->getOp();
+            fBinExp->getRight()->accept2(this);
+            std::cout<<")";
+        }
 };
 
 #endif //EXPR_VISITOR_H
